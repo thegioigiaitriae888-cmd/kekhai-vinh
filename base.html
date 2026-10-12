@@ -15,11 +15,11 @@
 </head>
 <body>
   {% block masthead %}
-  <div class="notice"><div class="container notice-inner"><span class="notice-mark" aria-hidden="true"></span><strong>NỀN TẢNG HỖ TRỢ KÊ KHAI ĐỘC LẬP</strong><span class="notice-divider">|</span><span>Không phải website của cơ quan nhà nước</span></div></div>
   <header class="header"><div class="container header-inner">
-    <a href="/" class="brand" aria-label="Trở về trang chủ Hỗ trợ kê khai Vinh">
-      <span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><rect x="9" y="6" width="22" height="28" rx="3" stroke="currentColor" stroke-width="2.2"/><path d="M14 14h12M14 20h12M14 26h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M28 8l5 5" stroke="currentColor" stroke-width="2"/></svg></span>
-      <span class="brand-text"><strong>HỖ TRỢ KÊ KHAI <em>VINH</em></strong><small>NỀN TẢNG KÊ KHAI TRỰC TUYẾN ĐỘC LẬP</small></span>
+    <a href="/" class="brand" aria-label="Cổng Dịch vụ công Quốc gia">
+      <img class="brand-banner"
+           src="{{ url_for('static', path='/dvc-logo.png') }}"
+           alt="Cổng Dịch vụ công Quốc gia — Kết nối, cung cấp thông tin và dịch vụ công mọi lúc, mọi nơi">
     </a>
     <nav class="nav" aria-label="Điều hướng chính"><a href="/" class="{{ 'active' if page == 'home' else '' }}">Trang chủ</a><a href="/nop-ho-so" class="{{ 'active' if page == 'form' else '' }}">Nộp hồ sơ</a><a href="/tra-cuu" class="{{ 'active' if page == 'lookup' else '' }}">Tra cứu</a><a href="/huong-dan" class="{{ 'active' if page == 'guide' else '' }}">Hướng dẫn</a></nav>
     <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false">☰ <span class="visually-hidden">Mở menu</span></button>
