@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}?v=exact-r1-5">
   <script defer src="{{ url_for('static', path='/app.js') }}"></script>
   {% block extra_head %}{% endblock %}
 </head>
@@ -21,9 +21,9 @@
            src="{{ url_for('static', path='/dvc-logo.png') }}"
            alt="Cổng Dịch vụ công Quốc gia — Kết nối, cung cấp thông tin và dịch vụ công mọi lúc, mọi nơi">
     </a>
-    <nav class="nav" aria-label="Điều hướng chính"><a href="/" class="{{ 'active' if page == 'home' else '' }}">Trang chủ</a><a href="/nop-ho-so" class="{{ 'active' if page == 'form' else '' }}">Nộp hồ sơ</a><a href="/tra-cuu" class="{{ 'active' if page == 'lookup' else '' }}">Tra cứu</a><a href="/huong-dan" class="{{ 'active' if page == 'guide' else '' }}">Hướng dẫn</a></nav>
+    <nav class="nav" aria-label="Điều hướng chính"><a href="/" class="{{ 'active' if page == 'home' else '' }}">Trang chủ</a><a href="/nop-ho-so" class="{{ 'active' if page == 'form' else '' }}">Nộp hồ sơ</a></nav>
     <button class="menu-toggle" type="button" aria-controls="mobile-menu" aria-expanded="false">☰ <span class="visually-hidden">Mở menu</span></button>
-  </div><nav class="mobile-menu" id="mobile-menu" hidden><a href="/">Trang chủ</a><a href="/nop-ho-so">Nộp hồ sơ</a><a href="/tra-cuu">Tra cứu</a><a href="/huong-dan">Hướng dẫn</a></nav></header>
+  </div><nav class="mobile-menu" id="mobile-menu" hidden><a href="/">Trang chủ</a><a href="/nop-ho-so">Nộp hồ sơ</a></nav></header>
   {% endblock %}
   <main id="main">{% block content %}{% endblock %}</main>
   {% block site_footer %}

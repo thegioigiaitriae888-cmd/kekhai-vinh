@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Dịch vụ công liên kết{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{{ url_for('static',path='/linked-service.css') }}?v=link-r1-1">{% endblock %}
+{% block content %}
+<section class="linked-page page-area">
+  <div class="container linked-container">
+    <div class="linked-heading"><h1>Dịch vụ công liên kết</h1></div>
+    <div class="linked-public-card">
+      <div class="linked-logo-slot"><img src="/lien-ket-media/logo?v={{ logo_version }}" alt="Biểu trưng tài nguyên và môi trường (hình ảnh tham khảo)"></div>
+      <h2>Bộ Tài nguyên &amp; Môi trường</h2>
+      <p class="linked-independent-label">Thông tin tham khảo trên nền tảng hỗ trợ độc lập · Không phải cổng chính thức</p>
+      <div class="linked-qr-area" aria-live="polite">
+        {% if qr_available %}
+        <img class="linked-qr" src="/lien-ket-media/qr?v={{ qr_version }}" alt="Mã QR được quản trị viên cung cấp, hãy kiểm tra địa chỉ đích trước khi truy cập">
+        {% else %}
+        <div class="linked-qr-empty" role="img" aria-label="Vị trí chờ hiển thị mã QR do quản trị viên tải lên">
+          <img class="linked-qr-placeholder" src="{{ url_for('static',path='/linked-qr-symbol.png') }}" alt="" aria-hidden="true">
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

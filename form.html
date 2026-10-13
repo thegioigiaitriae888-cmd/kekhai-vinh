@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% import 'components.html' as f with context %}
+{% block title %}Nộp hồ sơ kê khai{% endblock %}
+{% block content %}
+<div class="page-area form-page-area" data-ui-version="V0.3.9-R5">
+  <div class="container content-container form-shell">
+    {% if errors %}
+    <div role="alert" class="error-banner"><strong>Vui lòng kiểm tra lại thông tin.</strong> {{ errors.get('global','Một số trường chưa đầy đủ hoặc chưa hợp lệ. Các trường cần điều chỉnh được đánh dấu bên dưới.') }}</div>
+    {% endif %}
+    {% if read_only_preview %}
+    <div class="sensitive-note" role="status" aria-label="Bản xem trước không tiếp nhận hồ sơ">
+      <strong>BẢN XEM TRƯỚC — CHỈ ĐỌC.</strong> Đây là nền tảng hỗ trợ kê khai độc lập, không phải cổng tiếp nhận hồ sơ chính thức.
+      Không nhập thông tin căn cước, ngân hàng hoặc dữ liệu cá nhân thật; chức năng lưu và gửi hồ sơ đang tắt.
+    </div>
+    {% endif %}
+    {% if intake_enabled %}
+    <div class="sensitive-note" role="note">
+      <strong>ĐƠN VỊ TIẾP NHẬN: {{ operator.legal_name }}</strong> · Liên hệ: {{ operator.contact }}.
+      Phạm vi ủy quyền tham chiếu: {{ operator.authorization_ref }}.
+      Hồ sơ được gửi đến <strong>{{ operator.legal_name }}</strong> qua hệ thống này;
+      việc gửi không tự động tạo biên nhận của cơ quan nhà nước.
+      <a href="/chinh-sach-du-lieu">Xem thông tin xử lý dữ liệu cá nhân</a> trước khi tiếp tục.
+    </div>
+    {% endif %}
+    <form action="/nop-ho-so" method="post" class="intake-form intake-form-v039" id="intake-form" novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      {% if read_only_preview %}<fieldset class="preview-form-disabled" disabled>{% endif %}
+      <div class="form-topbar">
+        <h1 class="form-main-title">NỘP HỒ SƠ</h1>
+        <div class="form-top-actions">
+          <button type="submit" class="btn btn-outline btn-save-top" id="submit-form" aria-label="Lưu và gửi hồ sơ đến nền tảng hỗ trợ độc lập">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 3h13l3 3v15H4zM7 3v7h10V3M7 21v-8h10v8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg> Lưu &amp; gửi hồ sơ
+          </button>
+          <a class="btn btn-outline danger-outline" href="/">&#10005; &nbsp; Đóng</a>
+        </div>
+      </div>
+      <div class="consent-box consent-box-v039">
+        <label class="check-label check-label-v039">
+          <input type="checkbox" name="consent" value="on" {% if data.get('consent') == 'on' %}checked{% endif %}>
+          <span>Tôi cam kết thông tin kê khai chính xác và đồng ý với <a href="/chinh-sach-du-lieu" target="_blank" rel="noopener">chính sách xử lý dữ liệu</a> của đơn vị tiếp nhận.</span>
+        </label>
+        
+        {% if 'consent' in errors %}<div class="consent-error">{{ errors['consent'] }}</div>{% endif %}
+      </div>
+      <section class="form-section form-section-v039">
+        <h2 class="section-bar">THÔNG TIN CHUNG</h2>
+        <div class="form-body">
+          <div class="form-grid columns-4">
+            {{ f.select('intake_unit','Đơn vị tiếp nhận',intake_units,'Chọn đơn vị tiếp nhận',true) }}
+            {{ f.select('support_unit','Đơn vị hỗ trợ',support_units,'Chọn đơn vị hỗ trợ',true) }}
+            {{ f.select('business_type','Hình thức kinh doanh',business_types,'Chọn hình thức',true) }}
+            {{ f.select('procedure','Thủ tục hành chính',procedures,'Chọn thủ tục',true) }}
+          </div>
+          <div class="form-grid columns-1 separate-row">{{ f.select('service','Dịch vụ công',services,'Chọn dịch vụ công',true) }}</div>
+        </div>
+      </section>
+      <section class="form-section form-section-v039">
+        <h2 class="section-bar">THÔNG TIN NGƯỜI NỘP HỒ SƠ</h2>
+        <div class="form-body">
+          <div class="form-grid columns-3">
+            {{ f.input('applicant_name','Tên người nộp','Nhập họ và tên',true) }}
+            {{ f.input('dob','Ngày sinh','',true,'date') }}
+            {{ f.input('id_number','Số CMND/CCCD','Nhập số CMND/CCCD',true) }}
+            {{ f.input('id_date','Ngày cấp','',true,'date') }}
+            {{ f.input('id_place','Nơi cấp','Nhập nơi cấp CMND/CCCD',true) }}
+            {{ f.input('phone','Số điện thoại','Nhập số điện thoại',true,'tel') }}
+            {{ f.input('address','Địa chỉ chi tiết','Nhập địa chỉ chi tiết',true,'text','span-all') }}
+          </div>
+          <label class="check-label toggle-label authorized-toggle"><input type="checkbox" id="authorized" name="authorized" value="on" {% if data.get('authorized') == 'on' %}checked{% endif %}><span>Người được ủy quyền</span></label>
+          <div class="form-grid columns-2 conditional {% if data.get('authorized') != 'on' %}is-hidden{% endif %}" id="authorized-fields">
+            {{ f.input('agent_name','Họ và tên người được ủy quyền','Nhập họ và tên',true) }}
+            {{ f.input('agent_phone','Số điện thoại người được ủy quyền','Nhập số điện thoại',true,'tel') }}
+          </div>
+        </div>
+      </section>
+      <section class="form-section form-section-v039">
+        <h2 class="section-bar">THÔNG TIN NGƯỜI SỬ DỤNG ĐẤT, CHỦ SỞ HỮU TÀI SẢN HOẶC NGƯỜI QUẢN LÝ ĐẤT</h2>
+        <div class="form-body">
+          <div class="form-grid columns-3">
+            {{ f.input('land_user','Tên người sử dụng đất hoặc chủ sở hữu','Nhập họ và tên') }}
+            {{ f.input('land_address','Địa chỉ chi tiết','Nhập địa chỉ chi tiết') }}
+            {{ f.input('land_phone','Số điện thoại','Nhập số điện thoại',false,'tel') }}
+          </div>
+        </div>
+      </section>
+      <section class="form-section form-section-v039">
+        <h2 class="section-bar">THÔNG TIN NGÂN HÀNG KHAI BÁO THUẾ</h2>
+        <div class="form-body">
+          <div class="form-grid columns-3">
+            {{ f.input('bank_name','Ngân hàng','Nhập tên ngân hàng') }}
+            {{ f.input('bank_account','Số tài khoản','Nhập số tài khoản nếu cần') }}
+            {{ f.input('bank_holder','Chủ tài khoản','Nhập họ và tên chủ tài khoản') }}
+          </div>
+        </div>
+      </section>
+      <section class="form-section form-section-v039">
+        <h2 class="section-bar">GHI CHÚ BỔ SUNG</h2>
+        <div class="form-body">
+          <div class="field"><label for="notes">Nội dung cần lưu ý (không bắt buộc)</label><textarea name="notes" id="notes" rows="3" maxlength="1000" placeholder="Nhập yêu cầu hoặc ghi chú bổ sung nếu có">{{ data.get('notes','') }}</textarea><span class="field-error">{{ errors.get('notes','') }}</span></div>
+        </div>
+      </section>
+      <div class="form-actions form-actions-v039"><a class="btn btn-outline danger-outline" href="/">&#10005; &nbsp; Đóng</a><button type="submit" class="btn btn-outline" aria-label="Lưu và gửi hồ sơ đến nền tảng hỗ trợ độc lập">Lưu &amp; gửi hồ sơ</button></div>
+      {% if read_only_preview %}</fieldset>{% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}
